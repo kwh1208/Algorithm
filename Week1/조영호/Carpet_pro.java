@@ -16,6 +16,7 @@ public class Carpet_pro {
 
             // "가로는 세로의 길이보다 크거나 같다" 조건
             if (row >= col) {
+                // yellow 넓이 = (row-2) * (col*2)
                 if ((row - 2) * (col - 2) == yellow) {
                     answer[0] = row;
                     answer[1] = col;
