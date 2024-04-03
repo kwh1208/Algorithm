@@ -8,33 +8,38 @@
 // 나와 아버지는 1촌이고, 나와 형제는 2촌, 나의 할아버지는 2촌... 과 같이 
 // 어떤 특정 사람 A, B가 있다고 가정하면, A에서 부모를 각각의 부모를 따라서 B로 이동하는 횟수가 바로 촌수입니다.
 
-// 1. 사람들의 관계를 양방향 인접리스트로 구현한다.
-// 2. 촌수를 계산할 사람 2명 중 1명을 시작점으로 두고, 나머지 1명을 끝점으로 설정한 후, DFS를 통해 끝점에 도달할 때까지 반복한다. 이 때, cnt를 1씩 증가시키면서 반복한다.
-// 2-1. 끝점에 도달할 경우, cnt의 값을 출력하고 종료한다.
-// 2-2. 끝점에 도달할 수 없는 경우 -1을 출력하고 종료한다.
+// 1. 사람들의 관계를 양방향 인접리스트가 아닌 인접행렬로 구현한다.
+// 2. 관계를 찾아야 하는 두 사람 중 한 명으로부터 DFS 탐색을 시작하여 몇 개의 노드를 지나가는지 개수를 카운팅
+// 3. 탐색 중 다른 한 사람까지 도달하면 카운팅한 값을 결과값에 넣어주고 탐색을 멈춘다.
+// 4. 예를 들어 나>부모>형제 순으로 찾아갈 때, 형제와의 촌수는 부모>형제의 단계를 합쳐 2가 되는 것이다.
+// 5. 모든 연결 노드를 탐색해도 목표인 사람을 찾지 못했다면 촌수관계가 없다는 뜻이므로 결과값의 초기화값인 -1이 출력
 
 import java.io.*;
 import java.util.*;
 
 public class ChonsuCalculation_bj {
-    static int ans = -1;
+    static int N, from, to, result = -1;
+    static boolean[][] map;
+    static boolean[] visited;
 
-    // DFS를 이용하여 촌수 계산.
-    public static void DFS(ArrayList<ArrayList<Integer>> a, boolean[] visited, int pos, int find, int cnt) {
-        visited[pos] = true;
+    // 몇 개의 노드를 지나가는지 개수를 카운팅
+    private static void dfs(int p, int d) {
 
-        for (int i : a.get(pos)) {
-            if (!visited[i]) {
-                // 찾으려는 사람의 도달.
-                if (i == find) {
-                    ans = cnt + 1;
-                    return;
-                }
+        // 방문처리
+        visited[p] = true;
 
-                DFS(a, visited, i, find, cnt + 1);
-            }
+        // 목표
+        // 탐색 중 다른 한 사람까지 도달하면 카운팅한 값을 결과값에 넣어주고 탐색을 멈춘다.
+        if (p == to) {
+            result = d;
+            return;
         }
-    }
+
+        for (int i = 1; i <= N; i++) {
+            if (map[p][i] && !visited[i])
+                dfs(i, d + 1);
+        }
+    }// end of dfs
 
     public static void main(String[] args) throws Exception {
         // Scanner와 달리 BufferedReader는 개행문자만 경계로 인식
@@ -46,57 +51,38 @@ public class ChonsuCalculation_bj {
         // String으로 리턴 값이 고정되어 있기 때문에, 다른 타입으로 입력을 받고자 한다면 반드시 형변환이 필요
         // 그리고, 예외처리를 반드시 필요로 한다.
         // readLine()시 마다 try/catch문으로 감싸주어도 되고, throws IOException 을 통한 예외처리를 해도 된다
-        int N = Integer.parseInt(br.readLine());
-        // 일반적으로 출력을 할 때, System.out.println(""); 을 사용
-        // 적은 양의 출력에서는 편리하고, 그렇게 큰 성능 차이 없이 사용할 수 있다.
-        // 하지만 우리가 늘 고려해야하는 경우는 양이 많을 경우
-        // 많은 양의 출력을 할 때는, 입력과 동일하게 버퍼를 사용
-        // BufferedWriter는 System.out.println(""); 처럼 출력과 개행을 동시해 해주지 않는다
-        // 개행을 위해선 따로 newLine(); 혹은 bw.write("\n");을 사용
-        // 그리고 BufferedWriter의 경우 버퍼를 잡아 놓았기 때문에 반드시 사용한 후에, flush()/ close()를 해주어야 한다.
-        // close()를 하게되면, 출력 스트림을 아예 닫아버리기 때문에 한번 출력후, 다른 것도 출력하고자 한다면 flush()를 사용하면 된다.
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        // 사람의 수
+        N = Integer.parseInt(br.readLine());
         // StringTokenizer 클래스는 문자열을 구분자를 이용하여 분리할 때 사용
         // 만일 BufferedReader 클래스의 메서드로 입력을 읽어들인다면 라인 단위로 읽어들일 수 밖에 없습니다
         // 꼭 BufferedReader 클래스만이 아니더라도, 스페이스 기준으로 혹은 컴마로 혹은 공백을 기준으로 문자열들을 분리한다던가,
         // 특정 문자에 따라 문자열을 나누고 싶을 때 StringTokenizer를 사용
         // 즉, 토큰은 분리된 문자열 조각으로, StringTokenizer 클래스는 하나의 문자열을 여러 개의 토큰으로 분리하는 클래스
-        StringTokenizer st;
+        StringTokenizer st = null;
 
         st = new StringTokenizer(br.readLine());
-        int findX = Integer.parseInt(st.nextToken());
-        int findY = Integer.parseInt(st.nextToken());
+        from = Integer.parseInt(st.nextToken());
+        to = Integer.parseInt(st.nextToken());
 
-        // ArrayList는 자바에서 기본적으로 많이 사용되는 클래스
-        // ArrayList는 자바의 List 인터페이스를 상속받은 여러 클래스 중 하나
-        // 일반 배열과 동일하게 연속된 메모리 공간을 사용하며 인덱스는 0부터 시작
-        ArrayList<ArrayList<Integer>> a = new ArrayList<>();
-        // ArrayList를 생성한 후 add() 메소드로 엘레멘트를 추가
-        for (int i = 0; i <= N; i++) {
-            a.add(new ArrayList<>());
-        }
-
+        // boolean[N+1][N+1] map: i번 사람과 j번 사람의 연결유무를 저장하는 배열
+        map = new boolean[N + 1][N + 1];
         int M = Integer.parseInt(br.readLine());
-        // 양방향 인접리스트 구현.
+
         for (int i = 0; i < M; i++) {
             st = new StringTokenizer(br.readLine());
-            int x = Integer.parseInt(st.nextToken());
-            int y = Integer.parseInt(st.nextToken());
+            // 부모
+            int v1 = Integer.parseInt(st.nextToken());
+            // 자식
+            int v2 = Integer.parseInt(st.nextToken());
 
-            a.get(x).add(y);
-            a.get(y).add(x);
-        }
+            map[v1][v2] = map[v2][v1] = true;
+        } // input
 
-        boolean[] visited = new boolean[N + 1];
+        visited = new boolean[N + 1];
+        // 관계를 찾아야 하는 두 사람 중 한 명으로부터 DFS 탐색을 시작
+        dfs(from, 0);
 
-        DFS(a, visited, findX, findY, 0);
-
-        // 출력을 위해서는 out.write() 후 flush() 와 close() 를 모두 사용해야함
-        // flush 는 write 에 저장된 값을 출력함과 동시에 비워주는 역할이고, close() 를 끝 마무리해주는 역할
-        bw.write(ans + "\n");
-        bw.flush();
-        bw.close();
-        br.close();
+        System.out.println(result);
     }
 
 }
