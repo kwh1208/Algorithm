@@ -20,7 +20,7 @@
 // 너비 우선적으로 완전탐색하기 때문이다.
 
 // DFS를 활용하면 쉽게 풀 수 있는 문제
-// 처음에, visited 배열을 사용하지 않는 BFS 방식으로 문제를 풀려고 했으나, 계속 0%에서 시간초과가 발생하였습니다.
+// 처음에, visited 배열을 사용하지 않는 BFS 방식으로 문제를 풀려고 했으나, 계속 0%에서 시간초과가 발생
 // 이러한 로직은 java에서는 안 되지만 C++에서는 된다는 것을 확인
 // 대부분 BFS로 시간 초과가 나신 분들은 중복된 케이스를 배제한 브루트포스로 풀이하였기때문에 발생
 // 어떻게 고쳐야될지 감이 잘 안잡혀서 결국 재귀함수를 활용한 DFS로 노선을 변경
@@ -45,6 +45,53 @@ public class PipePlace_bj {
     static int[][] map;
     static int ans;
 
+    public static void main(String[] args) throws Exception {
+        // Scanner와 달리 BufferedReader는 개행문자만 경계로 인식
+        // 입력받은 데이터가 String으로 고정
+        // Scanner보다 속도가 빠르다
+        // 동기화 되기 때문에 멀티 쓰레드 환경에서 안전
+        // InputStream 를 문자단위(character) 데이터로 변환시키는 중간다리 역할
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        // 입력은 readLine();이라는 메소드를 사용
+        // String으로 리턴 값이 고정되어 있기 때문에, 다른 타입으로 입력을 받고자 한다면 반드시 형변환이 필요
+        // 그리고, 예외처리를 반드시 필요
+        // readLine()시 마다 try/catch문으로 감싸주어도 되고, throws IOException 을 통한 예외처리를 해도 된다
+        int N = Integer.parseInt(br.readLine());
+
+        // 일반적으로 출력을 할 때, System.out.println(""); 을 사용
+        // 적은 양의 출력에서는 편리하고, 그렇게 큰 성능 차이 없이 사용할 수 있다.
+        // 하지만 우리가 늘 고려해야하는 경우는 양이 많을 경우
+        // 많은 양의 출력을 할 때는, 입력과 동일하게 버퍼를 사용
+        // BufferedWriter는 System.out.println(""); 처럼 출력과 개행을 동시해 해주지 않는다
+        // 개행을 위해선 따로 newLine(); 혹은 bw.write("\n");을 사용
+        // 그리고 BufferedWriter의 경우 버퍼를 잡아 놓았기 때문에 반드시 사용한 후에, flush()/ close()를 해주어야 한다.
+        // close()를 하게되면, 출력 스트림을 아예 닫아버리기 때문에 한번 출력후, 다른 것도 출력하고자 한다면 flush()를 사용하면 된다.
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+
+        // StringTokenizer 클래스는 문자열을 구분자를 이용하여 분리할 때 사용
+        // 만일 BufferedReader 클래스의 메서드로 입력을 읽어들인다면 라인 단위로 읽어들일 수 밖에 없습니다
+        // 꼭 BufferedReader 클래스만이 아니더라도, 스페이스 기준으로 혹은 컴마로 혹은 공백을 기준으로 문자열들을 분리한다던가,
+        // 특정 문자에 따라 문자열을 나누고 싶을 때 StringTokenizer를 사용
+        // 즉, 토큰은 분리된 문자열 조각으로, StringTokenizer 클래스는 하나의 문자열을 여러 개의 토큰으로 분리하는 클래스
+        StringTokenizer st;
+
+        int[][] map = new int[N + 1][N + 1];
+        for (int i = 1; i <= N; i++) {
+            st = new StringTokenizer(br.readLine());
+            for (int j = 1; j <= N; j++) {
+                map[i][j] = Integer.parseInt(st.nextToken());
+            }
+        }
+
+        int ans = 0;
+        DFS(1, 2, 0);
+
+        bw.write(ans + "\n");
+        bw.flush();
+        bw.close();
+        br.close();
+    }
+
     // x는 세로, y는 가로
     // direction이 0일 때는 파이프가 가로 방향, 1일 때는 세로 방향, 2일 때는 대각선 방향.
     public static void DFS(int x, int y, int direction) {
@@ -53,10 +100,10 @@ public class PipePlace_bj {
             ans++;
             return;
         }
-        // 파이프가 가로 방향일 경우, 갈 수 있는 경우는 동쪽과 대각선임.
         switch (direction) {
-            // 동쪽
+            // 파이프가 가로 방향일 경우, 갈 수 있는 경우는 동쪽과 대각선임.
             case 0:
+                // 동쪽
                 if (y + 1 <= N && map[x][y + 1] == 0) {
                     DFS(x, y + 1, 0);
                 }
@@ -86,51 +133,4 @@ public class PipePlace_bj {
             DFS(x + 1, y + 1, 2);
         }
     }
-
-    public static void main(String[] args) throws Exception {
-        // Scanner와 달리 BufferedReader는 개행문자만 경계로 인식
-        // 입력받은 데이터가 String으로 고정
-        // Scanner보다 속도가 빠르다
-        // 동기화 되기 때문에 멀티 쓰레드 환경에서 안전
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        // 입력은 readLine();이라는 메소드를 사용
-        // String으로 리턴 값이 고정되어 있기 때문에, 다른 타입으로 입력을 받고자 한다면 반드시 형변환이 필요
-        // 그리고, 예외처리를 반드시 필요로 한다.
-        // readLine()시 마다 try/catch문으로 감싸주어도 되고, throws IOException 을 통한 예외처리를 해도 된다
-        N = Integer.parseInt(br.readLine());
-
-        // 일반적으로 출력을 할 때, System.out.println(""); 을 사용
-        // 적은 양의 출력에서는 편리하고, 그렇게 큰 성능 차이 없이 사용할 수 있다.
-        // 하지만 우리가 늘 고려해야하는 경우는 양이 많을 경우
-        // 많은 양의 출력을 할 때는, 입력과 동일하게 버퍼를 사용
-        // BufferedWriter는 System.out.println(""); 처럼 출력과 개행을 동시해 해주지 않는다
-        // 개행을 위해선 따로 newLine(); 혹은 bw.write("\n");을 사용
-        // 그리고 BufferedWriter의 경우 버퍼를 잡아 놓았기 때문에 반드시 사용한 후에, flush()/ close()를 해주어야 한다.
-        // close()를 하게되면, 출력 스트림을 아예 닫아버리기 때문에 한번 출력후, 다른 것도 출력하고자 한다면 flush()를 사용하면 된다.
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-
-        // StringTokenizer 클래스는 문자열을 구분자를 이용하여 분리할 때 사용
-        // 만일 BufferedReader 클래스의 메서드로 입력을 읽어들인다면 라인 단위로 읽어들일 수 밖에 없습니다
-        // 꼭 BufferedReader 클래스만이 아니더라도, 스페이스 기준으로 혹은 컴마로 혹은 공백을 기준으로 문자열들을 분리한다던가,
-        // 특정 문자에 따라 문자열을 나누고 싶을 때 StringTokenizer를 사용
-        // 즉, 토큰은 분리된 문자열 조각으로, StringTokenizer 클래스는 하나의 문자열을 여러 개의 토큰으로 분리하는 클래스
-        StringTokenizer st;
-
-        map = new int[N + 1][N + 1];
-        for (int i = 1; i <= N; i++) {
-            st = new StringTokenizer(br.readLine());
-            for (int j = 1; j <= N; j++) {
-                map[i][j] = Integer.parseInt(st.nextToken());
-            }
-        }
-
-        ans = 0;
-        DFS(1, 2, 0);
-
-        bw.write(ans + "\n");
-        bw.flush();
-        bw.close();
-        br.close();
-    }
-
 }

@@ -22,6 +22,48 @@ public class ChonsuCalculation_bj {
     static boolean[][] map;
     static boolean[] visited;
 
+    public static void main(String[] args) throws Exception {
+        // Scanner와 달리 BufferedReader는 개행문자만 경계로 인식
+        // 입력받은 데이터가 String으로 고정
+        // Scanner보다 속도가 빠르다
+        // 동기화 되기 때문에 멀티 쓰레드 환경에서 안전
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        // 입력은 readLine();이라는 메소드를 사용
+        // String으로 리턴 값이 고정되어 있기 때문에, 다른 타입으로 입력을 받고자 한다면 반드시 형변환이 필요
+        // 그리고, 예외처리를 반드시 필요로 한다.
+        // readLine()시 마다 try/catch문으로 감싸주어도 되고, throws IOException 을 통한 예외처리를 해도 된다
+        // 사람의 수
+        int N = Integer.parseInt(br.readLine());
+        // StringTokenizer 클래스는 문자열을 구분자를 이용하여 분리할 때 사용
+        // 만일 BufferedReader 클래스의 메서드로 입력을 읽어들인다면 라인 단위로 읽어들일 수 밖에 없습니다
+        // 꼭 BufferedReader 클래스만이 아니더라도, 스페이스 기준으로 혹은 컴마로 혹은 공백을 기준으로 문자열들을 분리한다던가,
+        // 특정 문자에 따라 문자열을 나누고 싶을 때 StringTokenizer를 사용
+        // 즉, 토큰은 분리된 문자열 조각으로, StringTokenizer 클래스는 하나의 문자열을 여러 개의 토큰으로 분리하는 클래스
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        int from = Integer.parseInt(st.nextToken());
+        int to = Integer.parseInt(st.nextToken());
+
+        // boolean[N+1][N+1] map: i번 사람과 j번 사람의 연결유무를 저장하는 배열
+        boolean[][] map = new boolean[N + 1][N + 1];
+
+        int M = Integer.parseInt(br.readLine());
+
+        for (int i = 0; i < M; i++) {
+            // 부모
+            int v1 = Integer.parseInt(st.nextToken());
+            // 자식
+            int v2 = Integer.parseInt(st.nextToken());
+            map[v1][v2] = map[v2][v1] = true;
+        }
+
+        visited = new boolean[N + 1];
+
+        // 관계를 찾아야 하는 두 사람 중 한 명으로부터 DFS 탐색을 시작
+        dfs(from, 0);
+
+        System.out.println(result);
+    }
+
     // 몇 개의 노드를 지나가는지 개수를 카운팅
     private static void dfs(int p, int d) {
 
@@ -39,50 +81,6 @@ public class ChonsuCalculation_bj {
             if (map[p][i] && !visited[i])
                 dfs(i, d + 1);
         }
-    }// end of dfs
-
-    public static void main(String[] args) throws Exception {
-        // Scanner와 달리 BufferedReader는 개행문자만 경계로 인식
-        // 입력받은 데이터가 String으로 고정
-        // Scanner보다 속도가 빠르다
-        // 동기화 되기 때문에 멀티 쓰레드 환경에서 안전
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        // 입력은 readLine();이라는 메소드를 사용
-        // String으로 리턴 값이 고정되어 있기 때문에, 다른 타입으로 입력을 받고자 한다면 반드시 형변환이 필요
-        // 그리고, 예외처리를 반드시 필요로 한다.
-        // readLine()시 마다 try/catch문으로 감싸주어도 되고, throws IOException 을 통한 예외처리를 해도 된다
-        // 사람의 수
-        N = Integer.parseInt(br.readLine());
-        // StringTokenizer 클래스는 문자열을 구분자를 이용하여 분리할 때 사용
-        // 만일 BufferedReader 클래스의 메서드로 입력을 읽어들인다면 라인 단위로 읽어들일 수 밖에 없습니다
-        // 꼭 BufferedReader 클래스만이 아니더라도, 스페이스 기준으로 혹은 컴마로 혹은 공백을 기준으로 문자열들을 분리한다던가,
-        // 특정 문자에 따라 문자열을 나누고 싶을 때 StringTokenizer를 사용
-        // 즉, 토큰은 분리된 문자열 조각으로, StringTokenizer 클래스는 하나의 문자열을 여러 개의 토큰으로 분리하는 클래스
-        StringTokenizer st = null;
-
-        st = new StringTokenizer(br.readLine());
-        from = Integer.parseInt(st.nextToken());
-        to = Integer.parseInt(st.nextToken());
-
-        // boolean[N+1][N+1] map: i번 사람과 j번 사람의 연결유무를 저장하는 배열
-        map = new boolean[N + 1][N + 1];
-        int M = Integer.parseInt(br.readLine());
-
-        for (int i = 0; i < M; i++) {
-            st = new StringTokenizer(br.readLine());
-            // 부모
-            int v1 = Integer.parseInt(st.nextToken());
-            // 자식
-            int v2 = Integer.parseInt(st.nextToken());
-
-            map[v1][v2] = map[v2][v1] = true;
-        } // input
-
-        visited = new boolean[N + 1];
-        // 관계를 찾아야 하는 두 사람 중 한 명으로부터 DFS 탐색을 시작
-        dfs(from, 0);
-
-        System.out.println(result);
     }
 
 }
