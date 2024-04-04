@@ -56,12 +56,3 @@ public class BOJ17070 {
         }
 
     }
-
-
-/*
-
-[ 4월 4일 (목) 문제 ]
-1. 백준: 파이프 옮기기1 17070번 https://www.acmicpc.net/problem/17070
-2. 백준: 촌수계산 2644번 https://www.acmicpc.net/problem/2644
-3. 프로그래머스: 타겟넘버 https://school.programmers.co.kr/learn/courses/30/lessons/43165
- */
