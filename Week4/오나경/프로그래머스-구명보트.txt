@@ -1,0 +1,34 @@
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+class Solution {
+    public int solution(int[] people, int limit) {
+        int answer = 0;
+        
+        List<Integer> list = Arrays.stream(people)
+         .boxed()                      
+         .sorted()
+         .collect(Collectors.toList());
+		 
+		int i=0;
+		int j=list.size()-1;
+		 
+		while(i<j) {
+			 if(list.get(i) + list.get(j) <= limit) {
+				 answer++;
+				 i++;
+				 j--;
+			 }else {
+				 answer++;
+				 j--;
+			 }
+		 }
+        
+        if(i==j) {
+            answer++;
+        }
+        
+        return answer;
+    }
+}
