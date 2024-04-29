@@ -44,43 +44,56 @@ class Solution {
 
         answer = sb.toString();
 
+        // System.out.println(answer);
+
+        // 4. 마침표가 처음이나 끝에 위치한다면 제거한다.
         if(answer.length() > 0) {
-            if(answer.substring(0,1).equals(".")) {
-                answer = answer.substring(1, answer.length());
+            if(answer.charAt(0) == '.') {
+                answer = answer.substring(1);
             }
         }
 
         if(answer.length() > 0) {
-            if(answer.substring(answer.length() - 1, answer.length()).equals(".")) {
+            if(answer.charAt(answer.length()-1) == '.') {
                 answer = answer.substring(0, answer.length() - 1);
             }
         }
 
+        // System.out.println(answer);
+
+        //빈 문자열이라면 "a"를 대입한다.
         if(answer.length() == 0) {
             answer += "a";
         }
 
+        // System.out.println(answer);
+
+        // answer 가 16자 이상일 경우 처음 15자 제외하고 다 삭제
         if(answer.length() >= 16) {
-            answer = answer.substring(0, 16);
+            answer = answer.substring(0, 15);
         }
 
-        if(answer.charAt(answer.length()) == '.') {
+        if(answer.charAt(answer.length() - 1) == '.') {
             answer = answer.substring(0, answer.length() - 1);
         }
 
-        sb = new StringBuilder();
 
+        // new_id 길이가 2자 이하라면, new_id의 마지막 문자를 new_id의 길이가 3이 될 때까지 반복해서 끝에 붙인다.
         if (answer.length() <= 2) {
+
+            sb = new StringBuilder(answer);
             int len = answer.length();
-            Character endChar = answer.charAt(answer.length());
-            while (len <= 3) {
+            Character endChar = answer.charAt(answer.length() - 1);
+
+            while (len < 3) {
                 sb.append(endChar);
 
                 len++;
             }
+            answer = sb.toString();
         }
 
-        answer = sb.toString();
+
         return answer;
     }
 }
