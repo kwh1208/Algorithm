@@ -35,7 +35,8 @@ class Solution {
             }
         }
     }
-    
+    "dfkjdjk^^%sdkjcnlks"
+    // iterator()
     public static void step2() {
         for (int i = id.size()-1; 0 <= i; i--) {
             if (!validCharacter.contains(id.get(i))) {
