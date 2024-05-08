@@ -7,58 +7,60 @@ package Week6.조영호;
 // 송전탑의 개수 n, 그리고 전선 정보 wires가 매개변수로 주어집니다. 
 // 전선들 중 하나를 끊어서 송전탑 개수가 가능한 비슷하도록 두 전력망으로 나누었을 때, 
 // 두 전력망이 가지고 있는 송전탑 개수의 차이(절대값)를 return 하도록 solution 함수를 완성해주세요.
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
 
 public class DivideElec_pg {
-     // bfs 메서드
-    static int bfs(int left, int n) {
-        int cnt = 1;
-        boolean[] visited = new boolean[n + 1];
-        Queue<Integer> queue = new LinkedList<>();
-        queue.add(left);
+    // 전력망을 나타낸 ArrayList 배열
+    static List<Integer>[] arrayLists;
+    // 두 전력망이 갖고 있는 송전탑 개수의 차이 최소값 (정답)
+    static int min;
 
+    public static int bfs(int start, int end, int n) {
+        Queue<Integer> queue = new LinkedList<>();
+        boolean[] visited = new boolean[n + 1];
+
+        // 연결된 송전탑 개수
+        int LinkedNodeCount = 0;
+        // 처음 하나 넣고 시작
+        queue.add(start);
+        // 방문체크
+        visited[start] = true;
+
+        // bfs 알고리즘
         while (!queue.isEmpty()) {
-            int temp = queue.poll();
-            visited[temp] = true;
-            for (int i = 1; i < n + 1; i++) {
-                if (arr[temp][i] == 1 && !visited[i]) {
-                    queue.add(i);
-                    cnt++;
+            int current = queue.poll();
+            LinkedNodeCount++;
+
+            for (int next : arrayLists[current]) {
+                // start가 포함된 전력망과 end가 포함된 전력망은 연결되어 있지 않으므로
+                // 다음 node가 end면 안됨
+                if (next != end && !visited[next]) {
+                    queue.add(next);
+                    visited[next] = true;
                 }
             }
         }
-        // cnt와 n - cnt는 각각 연결된 전력망
-        return Math.abs(cnt - (n - cnt));
+        return LinkedNodeCount;
     }
-     static int[][] arr;
+
     public int solution(int n, int[][] wires) {
-        int answer = Integer.MAX_VALUE;
+        min = Integer.MAX_VALUE;
+        arrayLists = new ArrayList[n + 1];
 
-        // 인접 행렬 만들기
-        arr = new int[n + 1][n + 1];
-        for (int i = 0; i < wires.length; i++) {
-            arr[wires[i][0]][wires[i][1]] = 1;
-            arr[wires[i][1]][wires[i][0]] = 1;
+        for (int i = 0; i < n; i++) {
+            arrayLists[i] = new ArrayList<>();
         }
-
-        // 선 하나씩 끊으면서 bfs 탐색
-        for (int i = 0; i < wires.length; i++) {
-            int left = wires[i][0];
-            int right = wires[i][1];
-
-            // 선 끊기
-            arr[left][right] = 0;
-            arr[right][left] = 0;
-
-            // bfs
-            answer = Math.min(answer, bfs(left, n));
-
-            // 끊었던 선 복구
-            arr[left][right] = 1;
-            arr[right][left] = 1;
+        for (int[] wire : wires) {
+            arrayLists[wire[0]].add(wire[1]);
+            arrayLists[wire[1]].add(wire[0]);
         }
+        for (int[] wire : wires) {
+            int n1 = bfs(wire[0], wire[1], n);
+            int n2 = bfs(wire[1], wire[0], n);
 
-        return answer;
+            // bfs로 연결되어 있는 송전탑 개수의 차이 구하고 min 갱신하기
+            min = Math.min(min, Math.abs(n1 - n2));
+        }
+        return min;
     }
 }
