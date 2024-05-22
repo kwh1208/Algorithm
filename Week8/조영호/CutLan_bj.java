@@ -6,13 +6,15 @@ package 조영호;
 // 이미 오영식은 자체적으로 K개의 랜선을 가지고 있다.
 // 그러나 K개의 랜선은 길이가 제각각이다.
 // 박성원은 랜선을 모두 N개의 같은 길이의 랜선으로 만들고 싶었기 때문에 K개의 랜선을 잘라서 만들어야 한다.
-// 예를 들어 300 cm 짜리 랜선에서 140 cm 짜리 랜선을 두 개 잘라내면 20 cm는 버려야 한다.(이미 자른 랜선은 붙일 수 없다.)
-// 편의를 위해 랜선을 자르거나 만들 때 손실되는 길이는 없다고 가정하며,기존의 K개의 랜선으로 N개의 랜선을 만들 수 없는 경우는 없다고 가정하자.
+// 예를 들어 300 cm 짜리 랜선에서 140 cm 짜리 랜선을 두 개 잘라내면 20 cm는 버려야 한다.
+// (이미 자른 랜선은 붙일 수 없다.)
+// 편의를 위해 랜선을 자르거나 만들 때 손실되는 길이는 없다고 가정
+// 기존의 K개의 랜선으로 N개의 랜선을 만들 수 없는 경우는 없다고 가정하자.
 // 그리고 자를 때는 항상 센티미터 단위로 정수길이만큼 자른다고 가정하자.
 // N개보다 많이 만드는 것도 N개를 만드는 것에 포함된다.
 // 이때 만들 수 있는 최대 랜선의 길이를 구하는 프로그램을 작성하시오.
-// 입력 첫째 줄에는 오영식이 이미 가지고 있는 랜선의 개수 K,그리고 필요한 랜선의 개수 N이 입력된다.
-// K는 1 이상 10,000 이하의 정수이고,N은 1 이상 1,000,000 이하의 정수이다.
+// 입력 첫째 줄에는 오영식이 이미 가지고 있는 랜선의 개수 K, 그리고 필요한 랜선의 개수 N이 입력된다.
+// K는 1 이상 10,000 이하의 정수이고, N은 1 이상 1,000,000 이하의 정수이다.
 // 그리고 항상 K≦N 이다.그 후 K줄에 걸쳐 이미 가지고 있는 각 랜선의 길이가 센티미터 단위의 정수로 입력된다.랜선의 길이는 231-1 보다 작거나 같은 자연수이다.
 
 import java.io.*;
@@ -29,60 +31,117 @@ public class CutLan_bj {
     // 랜선 K개와 랜선의 길이, 그리고 필요한 랜선의 개수 N
     // 이때 N개를 만들 수 있는 랜선의 최대 길이 구하기
 
-    static int[] arr;
-    static int k;
-    static int n;
+    // static int[] arr;
+    // static int k;
+    // static int n;
 
-    // 특정 랜선 길이로 만들 수 있는 랜선 개수 계산
-    public static int caculate(long h) {
-        int sum = 0;
-        for (int i = 0; i < k; i++) {
-            // 배열에 저장해 놓은 모든 랜선의 길이를 h로 나눈 값들의 합 = 바로 h로 잘랐을 때 나오는 랜선의 개수
-            sum += arr[i] / h;
-        }
-        return sum;
-    }
+    // // 특정 랜선 길이로 만들 수 있는 랜선 개수 계산
+    // public static int caculate(long h) {
+    // int sum = 0;
+    // for (int i = 0; i < k; i++) {
+    // // 배열에 저장해 놓은 모든 랜선의 길이를 h로 나눈 값들의 합 = 바로 h로 잘랐을 때 나오는 랜선의 개수
+    // sum += arr[i] / h;
+    // }
+    // return sum;
+    // }
+
+    // public static void main(String[] args) throws IOException {
+    // BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    // StringTokenizer st = new StringTokenizer(br.readLine());
+
+    // // 입력 받는 부분
+    // // 이미 갖고 있는 랜선 개수
+    // k = Integer.parseInt(st.nextToken());
+    // // 필요한 랜선 개수
+    // n = Integer.parseInt(st.nextToken());
+
+    // arr = new int[k];
+
+    // long low = 1;
+    // long high = 0;
+    // for (int i = 0; i < k; i++) {
+    // arr[i] = Integer.parseInt(br.readLine());
+    // // 랜선의 최대 길이를 int 형 변수 high에 저장
+    // // high 길이 만큼 랜선들을 자르고 N개 이상의 랜선을 만들 수 있으면 이 길이가 정답
+    // high = Math.max(high, arr[i]);
+    // }
+
+    // // 초기 설정을 통해 이분 탐색 범위 지정
+    // if (caculate(high) >= n) {
+    // System.out.println(high);
+    // return;
+    // }
+
+    // // 이분탐색
+    // while (low < high - 1) {
+    // // low와 high의 중간값 mid를 구해준다
+    // long mid = (low + high) / 2;
+    // if (caculate(mid) >= n) {
+    // low = mid;
+    // } else {
+    // // N보다 크거나 같으면 mid에서 high로 변경
+    // // 중간값에서도 N개 이상의 랜선이 나오기 때문에 mid보다 작은 값들을 볼 필요없다
+    // high = mid;
+    // }
+    // }
+    // System.out.println(low);
+    // }
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
 
-        // 입력 받는 부분
-        // 이미 갖고 있는 랜선 개수
-        k = Integer.parseInt(st.nextToken());
-        // 필요한 랜선 개수
-        n = Integer.parseInt(st.nextToken());
+        StringTokenizer st = new StringTokenizer(br.readLine(), " ");
 
-        arr = new int[k];
+        int K = Integer.parseInt(st.nextToken());
+        int N = Integer.parseInt(st.nextToken());
 
-        long low = 1;
-        long high = 0;
-        for (int i = 0; i < k; i++) {
+        int[] arr = new int[K];
+
+        long max = 0;
+
+        // 입력과 동시에 해당 랜선의 길이가 최댓값인지를 확인하고 max를 갱신
+        for (int i = 0; i < K; i++) {
             arr[i] = Integer.parseInt(br.readLine());
-            // 랜선의 최대 길이를 int 형 변수 high에 저장
-            // high 길이 만큼 랜선들을 자르고 N개 이상의 랜선을 만들 수 있으면 이 길이가 정답
-            high = Math.max(high, arr[i]);
-        }
-
-        // 초기 설정을 통해 이분 탐색 범위 지정
-        if (caculate(high) >= n) {
-            System.out.println(high);
-            return;
-        }
-
-        // 이분탐색
-        while (low < high - 1) {
-            // low와 high의 중간값 mid를 구해준다
-            long mid = (low + high) / 2;
-            if (caculate(mid) >= n) {
-                low = mid;
-            } else {
-                // N보다 크거나 같으면 mid에서 high로 변경
-                // 중간값에서도 N개 이상의 랜선이 나오기 때문에 mid보다 작은 값들을 볼 필요없다
-                high = mid;
+            if (max < arr[i]) {
+                max = arr[i];
             }
         }
-        System.out.println(low);
-    }
 
+        // 반드시 max에서 +1 값이어야 한다.
+        max++;
+
+        long min = 0;
+        long mid = 0;
+
+        while (min < max) {
+
+            // 범위 내에서 중간 길이를 구한다.
+            mid = (max + min) / 2;
+
+            long count = 0;
+
+            // 구해진 중간 길이로 잘라서 총 몇 개가 만들어지는지를 구한다.
+
+            for (int i = 0; i < arr.length; i++) {
+                count += (arr[i] / mid);
+            }
+
+            /*
+             * [upper bound 형식]
+             * 
+             * mid길이로 잘랐을 때의 개수가 만들고자 하는 랜선의 개수보다 작다면
+             * 자르고자 하는 길이를 줄이기 위해 최대 길이를 줄인다.
+             * 그 외에는 자르고자 하는 길이를 늘려야 하므로 최소 길이를 늘린다.
+             */
+            if (count < N) {
+                max = mid;
+            } else {
+                min = mid + 1;
+            }
+
+        }
+
+        // UpperBound로 얻어진 값(min)에 -1이 최대 길이가 된다.
+        System.out.println(min - 1);
+    }
 }
