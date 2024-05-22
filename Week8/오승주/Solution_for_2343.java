@@ -18,25 +18,25 @@ public class Solution_for_2343 {
         for (int n = 0; n < N; n++) {
             videos[n] = Integer.parseInt(st.nextToken());
         }
-        
-        long low = Arrays.stream(videos).max().getAsLong();    //stream(long[])의 max()메서드는 OptionalLong 타입을 반환
-        long high = Arrays.stream(videos).sum();    //stream(long[])의 sum()메서드는 long타입을 반환함.
+
+        // stream(long[])의 max()메서드는 OptionalLong 타입을 반환하므로 getAsLong()을 실행시켜주어야 함
+        long low = Arrays.stream(videos).max().getAsLong()-1;    // Arrays.stream(videos).max().getAasLong(); -> 틀렸습니다.
+        long high = Arrays.stream(videos).sum();                 // stream(long[])의 sum()메서드는 long타입을 반환
         long mid;
-        
-        while (low <= high) {
+
+        while (low + 1 < high) {
             
             mid = (low + high) / 2;
             // mid크기를 갖는 M개의 블루레이로 나눠서 저장할 수 있는 경우
 
             if (getDiskCount(mid) <= M) {
-                high = mid - 1;
+                high = mid;
             }
             else {
-                low = mid + 1;
+                low = mid;
             }
         }
-        
-        System.out.println(low);
+        System.out.println(high);
     }
 
     public static int getDiskCount(long size) {
