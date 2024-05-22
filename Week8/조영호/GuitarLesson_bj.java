@@ -40,105 +40,159 @@ public class GuitarLesson_bj {
     public static int start = 0;
     public static int end = 0;
 
+    // public static void main(String[] args) throws IOException {
+    // // 버퍼를 사용하겠다고 선언
+    // BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    // // 스트링토큰을 사용하겠다고 선언
+    // // readLine()을 통해 입력받은 값을 공백 단위로 구분
+    // StringTokenizer st = new StringTokenizer(br.readLine());
+
+    // // // 잘라낸 데이터들은 st에 담겨져 있어서 nextToken()으로 순서대로 가져와서 사용 가능
+    // // int N = Integer.parseInt(st.nextToken());
+    // // int M = Integer.parseInt(st.nextToken());
+
+    // // // 이진 탐색 사용
+    // // // 완전탐색으로 진행할 경우 시간 초과
+
+    // // // // N = 100,000 * 10,000 하면 int 범위 초과하므로 long으로 설정
+    // // // long max = 0;
+    // // // long min = 0;
+
+    // // // for (int i = 0; i < N; i++) {
+    // // // req.add(Integer.parseInt(st.nextToken()));
+
+    // // // // max = 모든 수의 합
+    // // // max += req.get(i);
+
+    // // // // min = 단일 수의 최댓값
+    // // // if (min < req.get(i))
+    // // // min = req.get(i);
+    // // // }
+
+    // // for (int i = 0; i < N; i++) {
+    // // videoSize[i] = Integer.parseInt(st.nextToken());
+
+    // // // 종료 인덱스 저장 (A배열의 총합) = 모든 레슨 길이 합
+    // // end += videoSize[i];
+
+    // // if (start < videoSize[i])
+    // // // 시작 인덱스 저장 (A배열 중 최댓값) = 최대 길이의 레슨
+    // // start = videoSize[i];
+
+    // // }
+
+    // // // 이진 탐색 시작
+    // // // min과 max의 격차를 줄여나가면서 탐색
+    // // // while (min <= max) {
+    // // // // 중앙값 : min과 max의 평균
+    // // // long mid = (min + max) / 2;
+    // // // sum = 0;
+    // // // cnt = 0;
+
+    // // // for (int i = 0; i < N; i++) {
+    // // // // 만약 기존 합에서 현재 값을 더한 값이 mid보다 크다면 cnt++ 후 sum 초기화
+    // // // if (sum + req.get(i) > mid) {
+    // // // cnt++;
+    // // // sum = 0;
+    // // // }
+    // // // // sum에 값들을 지속적으로 더해주기
+    // // // sum += req.get(i);
+    // // // }
+
+    // // // // 만약 sum이 0이 아니라면 cnt++
+    // // // if (sum != 0)
+    // // // cnt++;
+
+    // // // // 만약 cnt가 M보다 작거나 같다면 max를 줄여 다음 mid 값을 줄이기
+    // // // if (cnt <= M)
+    // // // max = mid - 1;
+    // // // // 만약 cnt가 M보다 크다면 min을 늘려 다음 mid 값을 늘리기
+    // // // else
+    // // // min = mid + 1;
+    // // // }
+
+    // // // // min에 최종 결과 저장되므로 min 출력
+    // // // System.out.println(min);
+    // // // }
+
+    // // // 이진 탐색 시작
+    // // // start와 end의 격차를 줄여나가면서 탐색
+    // // while (start <= end) {
+    // // int middle = (start + end) / 2;
+
+    // // for (int i = 0; i < N; i++) {
+    // // if (sum + videoSize[i] > middle) {
+    // // count++;
+    // // sum = 0;
+    // // } else {
+    // // // sum에 값들을 지속적으로 더해주기
+    // // sum += videoSize[i];
+    // // }
+
+    // // }
+    // // if (sum != 0)
+    // // count++;
+    // // // 지정한 블루레이 크기로 모든 레슨을 저장할 수 있는지 판단
+    // // // 모두 저장 가능 = 중앙값 크기로 모든 레슨 저장 가능 : 종료 인덱스 = 중앙값 -1
+    // // if (count > M)
+    // // start = middle + 1;
+    // // // 모두 저장할 수 없다 = 중앙값 크기로 모든 레슨 저장 불가능 : 시작 인덱스 = 중앙값 + 1
+    // // else
+    // // end = middle - 1;
+    // // }
+    // // System.out.println(start);
+    // }
+
+    static int N, M;
+    static int[] lesson;
+    static int left, right;
+
     public static void main(String[] args) throws IOException {
-        // 버퍼를 사용하겠다고 선언
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        // 스트링토큰을 사용하겠다고 선언
-        // readLine()을 통해 입력받은 값을 공백 단위로 구분
-        StringTokenizer st = new StringTokenizer(br.readLine());
+        StringTokenizer st = new StringTokenizer(br.readLine(), " ");
+        // ex) {1,2,3,4,5,6,7,8,9}
+        // 강의 수 N , 블루레이 갯수 M , 각 강의의 길이 배열 lesson 초기화
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
 
-        // 잘라낸 데이터들은 st에 담겨져 있어서 nextToken()으로 순서대로 가져와서 사용 가능
-        int N = Integer.parseInt(st.nextToken());
-        int M = Integer.parseInt(st.nextToken());
+        lesson = new int[N];
 
-        // 이진 탐색 사용
-        // 완전탐색으로 진행할 경우 시간 초과
-
-        // // N = 100,000 * 10,000 하면 int 범위 초과하므로 long으로 설정
-        // long max = 0;
-        // long min = 0;
-
-        // for (int i = 0; i < N; i++) {
-        // req.add(Integer.parseInt(st.nextToken()));
-
-        // // max = 모든 수의 합
-        // max += req.get(i);
-
-        // // min = 단일 수의 최댓값
-        // if (min < req.get(i))
-        // min = req.get(i);
-        // }
-
+        st = new StringTokenizer(br.readLine(), " ");
+        int sum = 0;
         for (int i = 0; i < N; i++) {
-            videoSize[i] = Integer.parseInt(st.nextToken());
-
-            // 종료 인덱스 저장 (A배열의 총합) = 모든 레슨 길이 합
-            end += videoSize[i];
-
-            if (start < videoSize[i])
-                // 시작 인덱스 저장 (A배열 중 최댓값) = 최대 길이의 레슨
-                start = videoSize[i];
-
+            lesson[i] = Integer.parseInt(st.nextToken());
+            sum += lesson[i];
+            left = Math.max(left, lesson[i]); // 9
         }
+        right = sum; // 45
 
-        // 이진 탐색 시작
-        // min과 max의 격차를 줄여나가면서 탐색
-        // while (min <= max) {
-        // // 중앙값 : min과 max의 평균
-        // long mid = (min + max) / 2;
-        // sum = 0;
-        // cnt = 0;
+        System.out.println(binSearch(left, right));
 
-        // for (int i = 0; i < N; i++) {
-        // // 만약 기존 합에서 현재 값을 더한 값이 mid보다 크다면 cnt++ 후 sum 초기화
-        // if (sum + req.get(i) > mid) {
-        // cnt++;
-        // sum = 0;
-        // }
-        // // sum에 값들을 지속적으로 더해주기
-        // sum += req.get(i);
-        // }
+    }
 
-        // // 만약 sum이 0이 아니라면 cnt++
-        // if (sum != 0)
-        // cnt++;
-
-        // // 만약 cnt가 M보다 작거나 같다면 max를 줄여 다음 mid 값을 줄이기
-        // if (cnt <= M)
-        // max = mid - 1;
-        // // 만약 cnt가 M보다 크다면 min을 늘려 다음 mid 값을 늘리기
-        // else
-        // min = mid + 1;
-        // }
-
-        // // min에 최종 결과 저장되므로 min 출력
-        // System.out.println(min);
-        // }
-
-        // 이진 탐색 시작
-        // start와 end의 격차를 줄여나가면서 탐색
-        while (start <= end) {
-            int middle = (start + end) / 2;
-
+    public static long binSearch(long left, long right) {
+        while (left <= right) {
+            long sum = 0;
+            long mid = (left + right) / 2;
+            int count = 1;
             for (int i = 0; i < N; i++) {
-                if (sum + videoSize[i] > middle) {
+                sum += lesson[i];
+                if (sum > mid) {
+                    sum = lesson[i];
                     count++;
-                    sum = 0;
-                } else {
-                    // sum에 값들을 지속적으로 더해주기
-                    sum += videoSize[i];
                 }
             }
-            if (sum != 0)
-                count++;
-            // 지정한 블루레이 크기로 모든 레슨을 저장할 수 있는지 판단
-            // 모두 저장 가능 = 중앙값 크기로 모든 레슨 저장 가능 : 종료 인덱스 = 중앙값 -1
-            if (count > M)
-                start = middle + 1;
-            // 모두 저장할 수 없다 = 중앙값 크기로 모든 레슨 저장 불가능 : 시작 인덱스 = 중앙값 + 1
-            else
-                end = middle - 1;
+            // 필요한 블루레이 갯수가 M보다 작거나 같으면
+            if (count <= M) {
+                right = mid - 1;
+            }
+            // 총 필요한 블루레이 개수가 M보다 크다면
+            else {
+                left = mid + 1;
+            }
         }
-        System.out.println(start);
+        return left;
+
     }
+
 }
