@@ -23,6 +23,8 @@ public class Main {
                 continue;
             }
 
+            check[nowVertex] = true;
+
             for (Node next : graph[nowVertex]) {
 
                 // 첫 선언된 dist 배열은 모두 무한대값이 들어가 있기 때문에 이 반복문을 무조건 탄다.
