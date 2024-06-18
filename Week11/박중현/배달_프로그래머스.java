@@ -11,12 +11,13 @@ class Solution {
         boolean[] check = new boolean[n+1];
         int[] dist = new int[n+1];
         Arrays.fill(dist, Integer.MAX_VALUE);
+
         dist[1] = 0;
 
         pq.offer(new Node(1, 0));
 
         while(!pq.isEmpty()) {
-            int nowVertex = pq.poll().index;
+            int nowVertex = pq.poll().index; // [1, 0]
 
             if(check[nowVertex]) {
                 continue;
