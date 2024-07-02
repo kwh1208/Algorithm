@@ -10,7 +10,6 @@ public class Main {
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
         arr = new int[9][9];
-        visit = new boolean[9][9];
 
         /*
         0 3 5 4 6 9 2 7 8    F T T T T T T T T
@@ -28,54 +27,74 @@ public class Main {
             StringTokenizer st = new StringTokenizer(br.readLine());
             for (int j = 0; j < 9; j++) {
                 arr[i][j] = Integer.parseInt(st.nextToken());
-                if (arr[i][j] != 0) {
-                    visit[i][arr[i][j] - 1] = true;
-                }
             }
         }
 
-        backtracking(0);
-
-        for (int i = 0; i < 9; i++) {
-            for (int j = 0; j < 9; j++) {
-                bw.write(arr[i][j]+" ");
-            }
-            bw.write("\n");
-        }
+        backtracking(0,0);
 
         bw.flush();
         bw.close();
     }
 
-    static void backtracking(int depth) {
+    static void backtracking(int depth, int col) {
 
-        if (depth == 9) {
+        if (col == 9) {
+            backtracking(depth + 1, 0);
             return;
         }
 
-        for (int i = 0; i < 9; i++) {
-            if (arr[depth][i] == 0) {
-
+        if (depth == 9) {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < 9; i++) {
                 for (int j = 0; j < 9; j++) {
-                    if (visit[depth][j] == false && checkIfAvailable(depth, i, j+1)) { // visit[1][2] = false
-                        arr[depth][i] = j + 1;
-                        visit[depth][j] = true;
-                        backtracking(depth+1);
-                        visit[depth][j] = false;
-//                        arr[depth][i] = 0;
-                    }
+                    sb.append(arr[i][j]).append(' ');
+                }
+                sb.append('\n');
+            }
+            System.out.println(sb);
+
+            System.exit(0);
+        }
+
+        if (arr[depth][col] == 0) {
+            for (int i = 1; i <= 9; i++) {
+                if (check(depth, col, i)) {
+                    arr[depth][col] = i;
+                    backtracking(depth, col+1);
                 }
             }
+            arr[depth][col]=0;
+            return;
         }
+
+        backtracking(depth, col+1);
     }
 
-    static boolean checkIfAvailable(int row, int column, int num) {
-        for (int i = 0; i < row; i++) {
-            if (num == arr[row][column]) {
+    static boolean check(int row, int column, int num) {
+        for (int i = 0; i < 9; i++) {
+            if (arr[row][i] == num) {
                 return false;
+            }
+        }
+
+        for (int i = 0; i < 9; i++) {
+            if (arr[i][column] == num) {
+                return false;
+            }
+        }
+
+        int ind_row = (row/3) * 3;
+        int ind_col = (column/3) * 3;
+
+        for (int i = ind_row; i < ind_row + 3; i++) {
+            for (int j = ind_col; j < ind_col + 3; j++) {
+                if (arr[i][j] == num) {
+                    return false;
+                }
             }
         }
 
         return true;
     }
+
 }
