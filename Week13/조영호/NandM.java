@@ -22,7 +22,11 @@ public class NandM {
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
 
+        // m크기의 탐색 과정에서의 값을 담을 int 배열(arr)
         arr = new int[M];
+        // 재귀를 하면서 이미 방문한 노드라면
+        // 다음 노드를 탐색하도록 하기 위해(유망한 노드인지 검사하기 위해)
+        // n크기의 boolean배열(visit)
         visit = new boolean[N];
 
         // 정적변수를 쓰면 되기 때문에 굳이 N과 M을 넘겨줄 필요 없다.
